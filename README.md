@@ -20,6 +20,15 @@ The data for the list screen comes from a REST API endpoint, and the data for th
 
 Once logged in, you should be able to press on a company from your list screen and see the details on the next screen.
 
+Note: For the GraphQL API call, you will need to add a header with key `x-api-key` and value of the auth token you got earlier or it will fail. So the headers should look like this:
+
+`
+headers: {
+    'x-api-key': 'da2-e5uXXXXXXXX'
+  }`
+
+DON'T try and put it in an `authorization` object or add the value to a `Bearer` key, follow exactly as above 👆.
+
 You can choose how you wish to display the data - don't worry if design is not your strong point, you won't be judged on that! A logo and a title will do, as long as is reasonably intuitive for the user.
 
 Once you have got the basic functionality up and running (you should not need to spend long on this), the rest of it is up to you. You can have a bit of fun with it and demonstrate some of your skills.
