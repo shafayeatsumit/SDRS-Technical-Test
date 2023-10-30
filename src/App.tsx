@@ -43,8 +43,6 @@ export const App = () => {
             name="CompaniesList"
             component={CompaniesListScreen}
             options={{
-              title: 'Companies',
-              headerLeft: undefined,
               headerShown: false,
             }}
           />
@@ -52,8 +50,6 @@ export const App = () => {
             name="CompanyDetails"
             component={CompanyDetailsScreen}
             options={{
-              title: 'Company Details',
-              headerRight: logOutButton,
               headerShown: false,
             }}
           />

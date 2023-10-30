@@ -23,7 +23,6 @@ interface CompanyInterface {
 }
 
 const Company: React.FC<{company: CompanyInterface}> = ({company}) => {
-  console.log('company', company);
   return (
     <View style={styles.card}>
       <Image

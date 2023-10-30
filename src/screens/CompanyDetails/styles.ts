@@ -1,6 +1,11 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -54,7 +59,15 @@ export const styles = StyleSheet.create({
     color: '#A7ACB0',
     fontWeight: '600',
   },
-
+  daysLeft: {
+    marginTop: 10,
+    marginLeft: 25,
+    marginRight: 20,
+    fontSize: 14,
+    fontWeight: '500',
+    // color: '#4F5962',
+    color: 'tomato',
+  },
   stats: {
     height: 150,
     marginTop: 20,

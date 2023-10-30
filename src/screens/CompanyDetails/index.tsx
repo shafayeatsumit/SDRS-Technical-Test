@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, ActivityIndicator} from 'react-native';
 import {styles} from './styles';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createGraphQLClient} from '../../helpers/api';
@@ -8,6 +8,7 @@ import {queryGetCompany} from '../../helpers/gql';
 import {AuthContext} from '../../helpers/context';
 import BarGraph from './BarGraph';
 import Header from '../../components/Header';
+import {daysUntilEndDate} from '../../helpers/date-time';
 
 type CompanyScreenProps = NativeStackScreenProps<any, 'CompanyScreen'> & {
   route: {
@@ -34,7 +35,6 @@ export const CompanyDetailsScreen = ({
       const response = await graphQLClient.request(queryGetCompany, {
         id: companyId,
       });
-      console.log('=>', response.getCompany);
       setCompany(response.getCompany);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -44,12 +44,15 @@ export const CompanyDetailsScreen = ({
   };
 
   useEffect(() => {
-    console.log('we do have token here', token, setToken);
     fetchCompanyData();
   }, []);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={'large'} color="#89C143" />
+      </View>
+    );
   }
 
   if (!company) {
@@ -84,6 +87,7 @@ export const CompanyDetailsScreen = ({
 
   const normalizedInvestmentRaised = normalizeInvestment(investmentRaised);
   const normalizedInvestmentSought = normalizeInvestment(investmentSought);
+  const daysLeft = daysUntilEndDate(endDate);
 
   return (
     <View style={styles.container}>
@@ -96,6 +100,7 @@ export const CompanyDetailsScreen = ({
       </View>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.daysLeft}>{daysLeft}</Text>
       <View style={styles.stats}>
         <View style={styles.fundRaised}>
           <Text style={styles.percentage}>{percentageRaised}%</Text>
@@ -103,7 +108,7 @@ export const CompanyDetailsScreen = ({
         </View>
         <BarGraph
           percentage={percentageRaised}
-          investmentRaised={normalizedInvestmentSought}
+          investmentRaised={normalizedInvestmentRaised}
           numberOfInvestors={numberOfInvestors}
         />
       </View>

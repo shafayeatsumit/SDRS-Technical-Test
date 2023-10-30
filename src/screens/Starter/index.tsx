@@ -24,7 +24,7 @@ export const StarterScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={'large'} />
+      <ActivityIndicator size={'large'} color="#89C143" />
     </View>
   );
 };
