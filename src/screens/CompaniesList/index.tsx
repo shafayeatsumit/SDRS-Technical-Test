@@ -1,17 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
-import {styles} from './styles';
+import {View, FlatList, Alert, TouchableOpacity} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import axios from 'axios';
-import {getCompaniesUrl} from '../../../config';
-import {AuthContext, AuthContextType} from '../../helpers/context';
+import Company from './Company';
+import {styles} from './styles';
+
+import {AuthContext} from '../../helpers/context';
 import {restApi} from '../../helpers/api';
 
 export const CompaniesListScreen = ({
@@ -20,22 +13,19 @@ export const CompaniesListScreen = ({
   const {token, setToken} = useContext(AuthContext);
   const [companies, setCompanies] = useState([]);
 
-  const navigateToCompanyDetails = companyId => {
+  const navigateToCompanyDetails = (companyId: string) => {
     navigation.navigate('CompanyDetails', {companyId});
   };
 
   const renderItem = ({item}) => {
     return (
-      <TouchableOpacity
-        onPress={() => navigateToCompanyDetails(item.id)}
-        style={{padding: 10, borderWidth: 0.2, marginVertical: 5}}>
-        <Text>{item.id}</Text>
+      <TouchableOpacity onPress={() => navigateToCompanyDetails(item.id)}>
+        <Company company={item} />
       </TouchableOpacity>
     );
   };
 
   const fetchCompanies = async () => {
-    console.log('we have the token here', token);
     restApi
       .get('companies', {token})
       .then(async resp => {
@@ -44,7 +34,7 @@ export const CompaniesListScreen = ({
       })
       .catch(error => {
         const message = error.message ? error.message : error;
-        console.log('message error', message);
+        Alert.alert('Error!', message);
       });
   };
 

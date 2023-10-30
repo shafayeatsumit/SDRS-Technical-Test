@@ -36,13 +36,13 @@ export const App = () => {
             component={SignInScreen}
             options={{
               title: 'Sign In',
-              headerLeft: null,
+              headerLeft: undefined,
             }}
           />
           <Stack.Screen
             name="CompaniesList"
             component={CompaniesListScreen}
-            options={{title: 'Companies'}}
+            options={{title: 'Companies', headerLeft: undefined}}
           />
           <Stack.Screen
             name="CompanyDetails"
