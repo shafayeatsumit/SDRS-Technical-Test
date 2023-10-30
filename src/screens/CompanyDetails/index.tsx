@@ -6,6 +6,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createGraphQLClient} from '../../helpers/api';
 import {queryGetCompany} from '../../helpers/gql';
 import {AuthContext} from '../../helpers/context';
+import BarGraph from './BarGraph';
 
 type CompanyScreenProps = NativeStackScreenProps<any, 'CompanyScreen'> & {
   route: {
@@ -32,6 +33,7 @@ export const CompanyDetailsScreen = ({
       const response = await graphQLClient.request(queryGetCompany, {
         id: companyId,
       });
+      console.log('=>', response.getCompany);
       setCompany(response.getCompany);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -53,11 +55,57 @@ export const CompanyDetailsScreen = ({
     return <Text>Error fetching data.</Text>;
   }
 
+  const {
+    coverImageUrl,
+    name,
+    country,
+    percentageRaised,
+    description,
+    endDate,
+    valuation,
+    investmentRaised,
+    numberOfInvestors,
+    investmentSought,
+    logoUrl,
+  } = company;
+
+  // Normalize the money amount to a string with two decimal places and thousands separators in GBP
+  function normalizeInvestment(investmentAmount: number) {
+    const normalizedInvestment = investmentAmount.toLocaleString('en-GB', {
+      style: 'currency',
+      currency: 'GBP',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    return normalizedInvestment;
+  }
+
+  const normalizedInvestmentRaised = normalizeInvestment(investmentRaised);
+  const normalizedInvestmentSought = normalizeInvestment(investmentSought);
+
   return (
-    <View>
-      <Text>{company.name}</Text>
-      <Text>{company.description}</Text>
-      {/* Render other company details as needed */}
+    <View style={styles.container}>
+      <View style={styles.header} />
+      <View style={styles.coverImageContainer}>
+        <Image source={{uri: coverImageUrl}} style={styles.coverImage} />
+        <View style={styles.logoContainer}>
+          <Image source={{uri: logoUrl}} style={styles.logo} />
+        </View>
+      </View>
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.description}>{description}</Text>
+      <View style={styles.stats}>
+        <View style={styles.fundRaised}>
+          <Text style={styles.percentage}>{percentageRaised}%</Text>
+          <Text style={styles.percentage}>{normalizedInvestmentSought}</Text>
+        </View>
+        <BarGraph
+          percentage={percentageRaised}
+          investmentRaised={normalizedInvestmentSought}
+          numberOfInvestors={numberOfInvestors}
+        />
+      </View>
     </View>
   );
 };

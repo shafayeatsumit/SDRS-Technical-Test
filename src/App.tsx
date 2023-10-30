@@ -50,6 +50,7 @@ export const App = () => {
             options={{
               title: 'Company Details',
               headerRight: logOutButton,
+              headerShown: false,
             }}
           />
         </Stack.Navigator>
