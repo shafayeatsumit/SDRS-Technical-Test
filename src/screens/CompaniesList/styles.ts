@@ -4,16 +4,22 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
+    backgroundColor: 'white',
   },
   text: {
     margin: 10,
   },
 
   card: {
-    backgroundColor: 'white',
+    backgroundColor: '#F2F2F2',
     borderRadius: 8,
-    margin: 10,
+    margin: 12,
     overflow: 'hidden', // To clip the logo outside the card
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: {width: 3, height: 5},
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
   },
   coverImage: {
     width: '100%',
