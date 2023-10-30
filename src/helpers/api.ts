@@ -7,7 +7,7 @@ const REST_API_ENDPONT =
 const GRAPHQL_ENDPOINT =
   'https://zgzjtmqrfng43iyc3slad3dfyi.appsync-api.eu-west-1.amazonaws.com/graphql';
 
-const anonymousEndpoints = ['dev/login'];
+const anonymousEndpoints = ['dev/login', 'dev/companies'];
 
 export const restApi = axios.create({
   baseURL: REST_API_ENDPONT,

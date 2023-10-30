@@ -1,17 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, FlatList, Alert, TouchableOpacity} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Company from './Company';
 import {styles} from './styles';
 
-import {AuthContext} from '../../helpers/context';
 import {restApi} from '../../helpers/api';
 import Header from '../../components/Header';
 
 export const CompaniesListScreen = ({
   navigation,
 }: NativeStackScreenProps<any>) => {
-  const {token, setToken} = useContext(AuthContext);
   const [companies, setCompanies] = useState([]);
 
   const navigateToCompanyDetails = (companyId: string) => {
@@ -28,7 +26,7 @@ export const CompaniesListScreen = ({
 
   const fetchCompanies = async () => {
     restApi
-      .get('companies', {token})
+      .get('companies')
       .then(async resp => {
         const {data} = resp;
         setCompanies(data);
