@@ -7,6 +7,7 @@ import {createGraphQLClient} from '../../helpers/api';
 import {queryGetCompany} from '../../helpers/gql';
 import {AuthContext} from '../../helpers/context';
 import BarGraph from './BarGraph';
+import Header from '../../components/Header';
 
 type CompanyScreenProps = NativeStackScreenProps<any, 'CompanyScreen'> & {
   route: {
@@ -86,7 +87,7 @@ export const CompanyDetailsScreen = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.header} />
+      <Header showBackButton={true} />
       <View style={styles.coverImageContainer}>
         <Image source={{uri: coverImageUrl}} style={styles.coverImage} />
         <View style={styles.logoContainer}>

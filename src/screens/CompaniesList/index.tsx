@@ -6,6 +6,7 @@ import {styles} from './styles';
 
 import {AuthContext} from '../../helpers/context';
 import {restApi} from '../../helpers/api';
+import Header from '../../components/Header';
 
 export const CompaniesListScreen = ({
   navigation,
@@ -44,6 +45,7 @@ export const CompaniesListScreen = ({
 
   return (
     <View style={styles.container}>
+      <Header showBackButton={false} />
       <FlatList
         data={companies}
         keyExtractor={item => item.id}

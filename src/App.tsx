@@ -42,7 +42,11 @@ export const App = () => {
           <Stack.Screen
             name="CompaniesList"
             component={CompaniesListScreen}
-            options={{title: 'Companies', headerLeft: undefined}}
+            options={{
+              title: 'Companies',
+              headerLeft: undefined,
+              headerShown: false,
+            }}
           />
           <Stack.Screen
             name="CompanyDetails"
