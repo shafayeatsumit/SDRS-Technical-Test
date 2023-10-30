@@ -1,32 +1,63 @@
 /* eslint-disable quotes */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image} from 'react-native';
 import {styles} from './styles';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import request from 'graphql-request';
-import {getCompanyDocument, graphqlEndpoint} from '../../../config';
+import {createGraphQLClient} from '../../helpers/api';
+import {queryGetCompany} from '../../helpers/gql';
+import {AuthContext} from '../../helpers/context';
+
+type CompanyScreenProps = NativeStackScreenProps<any, 'CompanyScreen'> & {
+  route: {
+    params: {
+      companyID: string;
+    };
+  };
+};
 
 export const CompanyDetailsScreen = ({
   navigation,
   route: {params},
-}: NativeStackScreenProps<any>) => {
+}: CompanyScreenProps) => {
+  const [company, setCompany] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const {token, setToken} = useContext(AuthContext);
+
+  const fetchCompanyData = async () => {
+    const graphQLClient = createGraphQLClient(token);
+    const {companyId} = params;
+
+    try {
+      const response = await graphQLClient.request(queryGetCompany, {
+        id: companyId,
+      });
+      setCompany(response.getCompany);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('we do have token here', token, setToken);
+    fetchCompanyData();
+  }, []);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (!company) {
+    return <Text>Error fetching data.</Text>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>{`To get the company details, you need to do a graphQL request to the endpoint ${graphqlEndpoint}, with the header:`}</Text>
-      <Text
-        style={
-          styles.boldText
-        }>{`'x-api-key': 'the-api-token-you-got-earlier'`}</Text>
-      <Text>and the document:</Text>
-      <Text>{getCompanyDocument}</Text>
-      <Text>
-        Along with the company's ID you pressed from the previous screen passed
-        as a variable
-      </Text>
-      <Text>
-        You can use the package graphql-request for this, or any other package
-        you choose.
-      </Text>
+    <View>
+      <Text>{company.name}</Text>
+      <Text>{company.description}</Text>
+      {/* Render other company details as needed */}
     </View>
   );
 };

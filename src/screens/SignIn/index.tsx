@@ -1,29 +1,75 @@
-import React from 'react';
-import {View, Button, TextInput, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, Button, TextInput, Image, Alert} from 'react-native';
 import {styles} from './styles';
-import axios from 'axios';
-import {email, loginUrl, password} from '../../../config';
 
-export const SignInScreen = () => {
-  const signIn = async () => {};
+import {restApi} from '../../helpers/api';
+import {saveSession} from '../../helpers/session';
+
+export const SignInScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const isFormValid = isEmailValid && isPasswordValid;
+
+  const signIn = async () => {
+    restApi
+      .post('login', {
+        email,
+        password,
+      })
+      .then(async resp => {
+        const {data} = resp;
+        await saveSession(data.token);
+        navigation.navigate('CompaniesList');
+      })
+      .catch(error => {
+        const message = error.message ? error.message : error;
+        Alert.alert('Error!', message);
+      });
+  };
+
+  const validateEmail = (text: string) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    setIsEmailValid(emailRegex.test(text));
+    setEmail(text);
+  };
+
+  const validatePassword = (text: string) => {
+    setIsPasswordValid(text.length >= 6);
+    setPassword(text);
+  };
 
   return (
     <View style={styles.container}>
-      <Text
-        style={
-          styles.text
-        }>{`In order to sign in, you need to do a post request to the url ${loginUrl} with the email "${email}" and password "${password}".`}</Text>
-      <Text style={styles.text}>
-        If the call is successful, the response object will contain a token
-        which you need to store in your app's state for later. Once you have
-        done this, the user should be navigated to the CompaniesList Screen
-      </Text>
-      <Text style={styles.text}>
-        Feel free to delete this text once your done!
-      </Text>
-      <TextInput placeholder="email" style={styles.text} />
-      <TextInput placeholder="password" style={styles.text} />
-      <Button onPress={signIn} title="Sign In" />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../../../assets/seedrs-logo-black.jpeg')}
+          style={styles.image}
+        />
+      </View>
+      <TextInput
+        placeholder="email"
+        onChangeText={validateEmail}
+        autoCapitalize="none"
+        value={email}
+        autoCorrect={false}
+        style={styles.text}
+      />
+      <TextInput
+        placeholder="password"
+        onChangeText={validatePassword}
+        value={password}
+        secureTextEntry
+        style={styles.text}
+      />
+      <Button
+        disabled={!isFormValid}
+        onPress={signIn}
+        title="Sign In"
+        color="#2A4ED8"
+      />
     </View>
   );
 };
