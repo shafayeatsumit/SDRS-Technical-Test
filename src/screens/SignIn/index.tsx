@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Button,
@@ -12,12 +12,15 @@ import {styles} from './styles';
 
 import {restApi} from '../../helpers/api';
 import {saveSession} from '../../helpers/session';
+import {AuthContext} from '../../helpers/context';
 
 export const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const {setToken} = useContext(AuthContext);
 
   const isFormValid = isEmailValid && isPasswordValid;
 
@@ -29,6 +32,7 @@ export const SignInScreen = ({navigation}) => {
       })
       .then(async resp => {
         const {data} = resp;
+        setToken(data.token);
         await saveSession(data.token);
         navigation.navigate('CompaniesList');
       })

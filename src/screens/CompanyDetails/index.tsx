@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image, ActivityIndicator} from 'react-native';
 import {styles} from './styles';
@@ -56,17 +55,19 @@ export const CompanyDetailsScreen = ({
   }
 
   if (!company) {
-    return <Text>Error fetching data.</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Error fetching data.</Text>;
+      </View>
+    );
   }
 
   const {
     coverImageUrl,
     name,
-    country,
     percentageRaised,
     description,
     endDate,
-    valuation,
     investmentRaised,
     numberOfInvestors,
     investmentSought,
