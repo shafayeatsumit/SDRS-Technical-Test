@@ -26,6 +26,7 @@ export const App = () => {
             name="SignIn"
             component={SignInScreen}
             options={{
+              headerShown: false,
               title: 'Sign In',
               headerLeft: undefined,
             }}

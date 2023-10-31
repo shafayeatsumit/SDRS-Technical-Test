@@ -1,30 +1,17 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ImageSourcePropType,
-} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation, CommonActions} from '@react-navigation/native';
+import {clearSession} from '../helpers/session';
 
 interface HeaderProps {
   showBackButton: boolean;
-  // backButtonImage: ImageSourcePropType;
-  // logoImage: ImageSourcePropType;
-  // logoutImage: ImageSourcePropType;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  showBackButton,
-
-  backButtonImage,
-  logoImage,
-  logoutImage,
-}) => {
+const Header: React.FC<HeaderProps> = ({showBackButton}) => {
   const navigation = useNavigation();
 
   function handleLogout() {
+    clearSession();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
